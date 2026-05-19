@@ -1,27 +1,21 @@
 #!/bin/bash
-set -euo pipefail
+# University of Artemis - Server Start Script
+# Uses Python to start the Node.js server in a new session so it persists
 
-PROJECT_DIR="/home/z/my-project"
-cd "$PROJECT_DIR"
+cd /home/z/my-project
 
 # Kill any existing server
 if [ -f server.pid ]; then
     OLD_PID=$(cat server.pid)
     if kill -0 "$OLD_PID" 2>/dev/null; then
-        kill "$OLD_PID" 2>/dev/null || true
+        echo "Stopping existing server (PID: $OLD_PID)..."
+        kill "$OLD_PID" 2>/dev/null
         sleep 1
     fi
     rm -f server.pid
 fi
 
-# Check if standalone build exists; if not, build it
-if [ ! -f ".next/standalone/server.js" ]; then
-  echo "[DEV] No production build found. Building..."
-  bun install
-  bun run build
-fi
-
-# Start the server using Python (creates new session that persists)
+# Start the server using Python (which creates a new session that persists)
 python3 << 'PYEOF'
 import subprocess, os
 
@@ -44,16 +38,17 @@ proc = subprocess.Popen(
 with open("/home/z/my-project/server.pid", "w") as f:
     f.write(str(proc.pid))
 
-print(f"[DEV] Server started with PID: {proc.pid}")
+print(f"Server started with PID: {proc.pid}")
 PYEOF
 
 # Wait for server to be ready
 for i in $(seq 1 10); do
     if curl -s -o /dev/null http://127.0.0.1:3000/ 2>/dev/null; then
-        echo "[DEV] Server is ready! PID: $(cat server.pid)"
+        echo "Server is ready! PID: $(cat server.pid)"
+        echo "Preview available at: http://localhost:81/"
         exit 0
     fi
     sleep 1
 done
 
-echo "[DEV] Warning: Server may not be fully ready yet."
+echo "Warning: Server may not be fully ready yet. Check server.pid for the process."
