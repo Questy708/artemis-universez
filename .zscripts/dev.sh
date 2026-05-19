@@ -21,9 +21,9 @@ if [ ! -f ".next/standalone/server.js" ]; then
   bun run build
 fi
 
-# Start the server using Python (creates new session that persists)
+# Start the server using Python (creates new session that persists across shell termination)
 python3 << 'PYEOF'
-import subprocess, os
+import subprocess, os, time
 
 os.chdir("/home/z/my-project")
 env = os.environ.copy()
@@ -45,6 +45,11 @@ with open("/home/z/my-project/server.pid", "w") as f:
     f.write(str(proc.pid))
 
 print(f"[DEV] Server started with PID: {proc.pid}")
+time.sleep(1)
+if proc.poll() is None:
+    print("[DEV] Server is alive and ready!")
+else:
+    print(f"[DEV] Server exited with code: {proc.poll()}")
 PYEOF
 
 # Wait for server to be ready

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { LandingPage } from './onboarding/LandingPage';
 import { SplitLayout } from './onboarding/SplitLayout';
 import { IdentityPage } from './onboarding/IdentityPage';
@@ -62,7 +62,11 @@ function parseSnapshot(snapshot: string): AppState {
 export default function ArtemisProjectApp({ onExit }: ArtemisProjectAppProps) {
   const snapshot = useSyncExternalStore(storeSubscribe, storeGetSnapshot, storeGetServerSnapshot);
   const appState = parseSnapshot(snapshot);
-  const isClient = snapshot !== '';
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const setCurrentStep = useCallback((step: Step) => {
     storeWrite({ ...parseSnapshot(storeGetSnapshot()), currentStep: step });
