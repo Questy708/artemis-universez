@@ -778,164 +778,337 @@ export default function AdminDashboard({ goToPage }: Props) {
     );
   }
 
-  // ─── Login Screen — Artemis Futuristic Design ───
+  // ─── Login Screen — Artemis Immersive Command Center ───
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#050a14] flex relative overflow-hidden">
-        {/* Background effects */}
+      <div className="min-h-screen bg-[#030712] flex relative overflow-hidden">
+        {/* Animated star field + aurora background */}
         <div className="absolute inset-0">
-          {/* Gradient orbs */}
-          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#8A0000]/8 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#80E9FF]/5 rounded-full blur-[120px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#8A0000]/3 rounded-full blur-[200px]" />
-          {/* Grid pattern */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
+          {/* Deep space gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-[#0a0f1e] to-[#030712]" />
+
+          {/* Aurora effect — top */}
+          <div className="absolute top-0 left-0 right-0 h-[500px] overflow-hidden">
+            <div
+              className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-[0.07]"
+              style={{
+                background: 'conic-gradient(from 180deg at 50% 50%, #8A0000, #80E9FF, #8A0000, transparent, #8A0000)',
+                filter: 'blur(80px)',
+                animation: 'auroraPulse 8s ease-in-out infinite alternate',
+              }}
+            />
+          </div>
+
+          {/* Floating orbs */}
+          <div className="absolute top-[15%] left-[10%] w-72 h-72 bg-[#8A0000]/[0.06] rounded-full blur-[100px]" style={{ animation: 'floatOrb1 20s ease-in-out infinite' }} />
+          <div className="absolute bottom-[20%] right-[15%] w-80 h-80 bg-[#80E9FF]/[0.04] rounded-full blur-[120px]" style={{ animation: 'floatOrb2 25s ease-in-out infinite' }} />
+          <div className="absolute top-[50%] left-[40%] w-96 h-96 bg-[#8A0000]/[0.03] rounded-full blur-[160px]" style={{ animation: 'floatOrb3 30s ease-in-out infinite' }} />
+
+          {/* Hex grid pattern */}
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='70' viewBox='0 0 60 70' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='white' stroke-width='0.3'/%3E%3C/svg%3E")`,
+            backgroundSize: '60px 70px'
+          }} />
+
+          {/* Radial scan lines */}
+          <div className="absolute inset-0 opacity-[0.015]" style={{
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(128,233,255,0.03) 2px, rgba(128,233,255,0.03) 4px)',
           }} />
         </div>
 
-        {/* Left side — branding */}
-        <div className="hidden lg:flex flex-1 flex-col justify-between p-12 relative z-10">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-[#8A0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/20">
-                <Shield size={18} className="text-white" />
+        {/* Ambient particle dots */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-[2px] h-[2px] bg-white/20 rounded-full"
+              style={{
+                left: `${5 + (i * 4.7) % 90}%`,
+                top: `${10 + (i * 7.3) % 80}%`,
+                animation: `particleDrift ${8 + (i % 5) * 4}s ease-in-out infinite alternate`,
+                animationDelay: `${i * 0.7}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* ═══ LEFT PANEL — Branding ═══ */}
+        <div className="hidden lg:flex flex-1 flex-col justify-between p-10 xl:p-14 relative z-10">
+          {/* Top — Logo */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#8A0000] to-[#5a0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/30">
+                <Shield size={20} className="text-white" />
               </div>
-              <div>
-                <span className="text-white font-bold text-lg tracking-tight">Artemis</span>
-                <span className="text-white/30 text-lg font-light ml-1.5">Command</span>
-              </div>
+              <div className="absolute -inset-1 rounded-xl bg-[#8A0000]/20 blur-md -z-10" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-white font-bold text-xl tracking-tight">Artemis</span>
+              <span className="text-white/20 text-xl font-light">Command</span>
             </div>
           </div>
 
-          <div className="max-w-md">
-            <h2 className="text-4xl font-bold text-white mb-4 leading-tight">
-              The future of<br />
-              <span className="bg-gradient-to-r from-[#8A0000] to-[#ff4444] bg-clip-text text-transparent">learning administration</span>
+          {/* Middle — Hero content */}
+          <div className="max-w-lg">
+            {/* Status badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] mb-8">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" style={{ animation: 'statusPulse 2s ease-in-out infinite' }} />
+              <span className="text-[11px] text-gray-400 font-medium tracking-wide">SYSTEMS ONLINE</span>
+            </div>
+
+            <h2 className="text-5xl xl:text-6xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+              Command the
+              <br />
+              <span className="bg-gradient-to-r from-[#8A0000] via-[#ff4444] to-[#8A0000] bg-clip-text text-transparent">future of learning</span>
             </h2>
-            <p className="text-gray-400 text-base leading-relaxed mb-8">
-              Manage the Artemis Collegium — applications, donations, communications, and the LMS. One dashboard for an entire global university.
+            <p className="text-gray-400 text-lg leading-relaxed mb-10 max-w-md">
+              The nerve center for Artemis Collegium. Manage admissions, track the LMS, orchestrate AI tutors, and oversee a global university — all from one dashboard.
             </p>
 
-            {/* Feature pills */}
-            <div className="flex flex-wrap gap-2">
-              {['Admissions', 'Fundraising', 'LMS Analytics', 'Communications', 'AI Insights'].map((feat) => (
-                <span key={feat} className="px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-xs text-gray-400 font-medium">
-                  {feat}
-                </span>
+            {/* Capability cards */}
+            <div className="grid grid-cols-2 gap-3 max-w-md">
+              {[
+                { icon: <FileText size={14} />, label: 'Admissions Pipeline', desc: 'Track every applicant' },
+                { icon: <BarChart3 size={14} />, label: 'LMS Analytics', desc: 'Real-time insights' },
+                { icon: <DollarSign size={14} />, label: 'Fundraising', desc: 'Donation tracking' },
+                { icon: <MessageSquare size={14} />, label: 'AI Intelligence', desc: 'Tutor management' },
+              ].map((cap) => (
+                <div
+                  key={cap.label}
+                  className="group flex items-start gap-3 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] hover:border-white/[0.08] transition-all duration-300"
+                >
+                  <div className="w-7 h-7 rounded-lg bg-[#8A0000]/10 flex items-center justify-center text-[#8A0000] shrink-0 mt-0.5 group-hover:bg-[#8A0000]/20 transition-colors">
+                    {cap.icon}
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-white/80 leading-tight">{cap.label}</p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">{cap.desc}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-gray-600 text-xs">
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          {/* Bottom — Status bar */}
+          <div className="flex items-center gap-6 text-gray-600 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" style={{ animation: 'statusPulse 2s ease-in-out infinite' }} />
               <span>All systems operational</span>
             </div>
-            <span>·</span>
+            <span className="text-gray-800">|</span>
             <span>University of Artemis</span>
+            <span className="text-gray-800">|</span>
+            <span>v2.0</span>
           </div>
         </div>
 
-        {/* Right side — login form */}
+        {/* ═══ RIGHT PANEL — Login Form ═══ */}
         <div className="flex-1 flex items-center justify-center px-6 relative z-10">
-          <div className="w-full max-w-[400px]">
+          <div className="w-full max-w-[420px]">
             {/* Mobile logo */}
-            <div className="lg:hidden flex items-center gap-3 mb-10">
-              <div className="w-10 h-10 rounded-xl bg-[#8A0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/20">
-                <Shield size={18} className="text-white" />
+            <div className="lg:hidden flex items-center gap-3 mb-12">
+              <div className="relative">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#8A0000] to-[#5a0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/30">
+                  <Shield size={20} className="text-white" />
+                </div>
+                <div className="absolute -inset-1 rounded-xl bg-[#8A0000]/20 blur-md -z-10" />
               </div>
-              <div>
-                <span className="text-white font-bold text-lg">Artemis</span>
-                <span className="text-white/30 text-lg font-light ml-1.5">Command</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-white font-bold text-xl">Artemis</span>
+                <span className="text-white/20 text-xl font-light">Command</span>
               </div>
             </div>
 
-            {/* Form container */}
-            <div className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-8 shadow-2xl shadow-black/20">
-              <div className="mb-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8A0000] to-[#5a0000] flex items-center justify-center mb-5 shadow-lg shadow-[#8A0000]/20">
-                  <Shield size={24} className="text-white" />
-                </div>
-                <h1 className="text-xl font-bold text-white mb-1">Welcome back</h1>
-                <p className="text-sm text-gray-500">Enter your admin password to continue</p>
+            {/* Form card with animated border */}
+            <div className="relative">
+              {/* Animated gradient border */}
+              <div className="absolute -inset-[1px] rounded-2xl overflow-hidden" style={{ animation: 'borderRotate 6s linear infinite' }}>
+                <div className="absolute inset-0" style={{
+                  background: 'conic-gradient(from 0deg, transparent 0%, #8A0000 10%, transparent 20%, transparent 50%, #80E9FF 60%, transparent 70%, transparent 100%)',
+                  animation: 'borderRotate 6s linear infinite',
+                }} />
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div>
-                  <label className="block text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">Admin Password</label>
-                  <div className="relative group">
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#8A0000]/20 to-[#80E9FF]/10 opacity-0 group-focus-within:opacity-100 transition-opacity blur-sm" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={e => { setPassword(e.target.value); setLoginError(''); }}
-                      placeholder="Enter password"
-                      className="relative w-full bg-white/[0.04] border border-white/[0.08] rounded-xl text-white px-4 py-3.5 text-sm placeholder-gray-600 focus:outline-none focus:border-[#8A0000]/50 focus:ring-1 focus:ring-[#8A0000]/20 transition-all"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-300 transition-colors"
-                      suppressHydrationWarning
-                    >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+              {/* Inner card */}
+              <div className="relative bg-[#0a0f1e]/95 backdrop-blur-2xl rounded-2xl p-8 shadow-2xl shadow-black/40">
+                {/* Lock icon with glow */}
+                <div className="flex justify-center mb-8">
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#8A0000] to-[#4a0000] flex items-center justify-center shadow-xl shadow-[#8A0000]/30">
+                      <Shield size={28} className="text-white" />
+                    </div>
+                    <div className="absolute -inset-2 rounded-2xl bg-[#8A0000]/10 blur-xl -z-10" />
+                    {/* Pulsing ring */}
+                    <div className="absolute -inset-3 rounded-2xl border border-[#8A0000]/20" style={{ animation: 'ringPulse 3s ease-in-out infinite' }} />
                   </div>
                 </div>
 
-                {loginError && (
-                  <div className="flex items-center gap-2.5 bg-red-500/[0.08] border border-red-500/[0.15] rounded-xl px-4 py-3">
-                    <div className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
-                      <XCircle size={12} className="text-red-400" />
-                    </div>
-                    <span className="text-red-300/80 text-sm">{loginError}</span>
-                  </div>
-                )}
+                <div className="text-center mb-8">
+                  <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">Admin Access</h1>
+                  <p className="text-sm text-gray-500">Authenticate to enter the command center</p>
+                </div>
 
-                <button
-                  type="submit"
-                  disabled={loginLoading || !password}
-                  className="relative w-full py-3.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden group"
-                  suppressHydrationWarning
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] to-[#b91c1c] group-hover:from-[#9a0000] group-hover:to-[#c52525] transition-all" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] to-[#b91c1c] opacity-0 group-hover:opacity-100 blur-xl transition-opacity" />
-                  <span className="relative text-white flex items-center justify-center gap-2">
-                    {loginLoading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Authenticating...
-                      </>
-                    ) : (
-                      <>
-                        Sign in
-                        <ArrowRight size={14} />
-                      </>
-                    )}
-                  </span>
-                </button>
-              </form>
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 mb-2.5 uppercase tracking-[0.15em]">Access Key</label>
+                    <div className="relative group">
+                      {/* Focus glow effect */}
+                      <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-[#8A0000]/30 via-[#80E9FF]/10 to-[#8A0000]/30 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 blur-[2px]" />
+                      <div className="relative">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={e => { setPassword(e.target.value); setLoginError(''); }}
+                          placeholder="Enter admin password"
+                          className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl text-white px-4 py-3.5 text-sm placeholder-gray-600 focus:outline-none focus:border-[#8A0000]/40 focus:bg-white/[0.05] transition-all duration-300"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-300 transition-colors"
+                          suppressHydrationWarning
+                        >
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {loginError && (
+                    <div className="flex items-center gap-3 bg-red-500/[0.06] border border-red-500/[0.12] rounded-xl px-4 py-3.5" style={{ animation: 'errorShake 0.4s ease-in-out' }}>
+                      <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                        <XCircle size={14} className="text-red-400" />
+                      </div>
+                      <span className="text-red-300/70 text-sm">{loginError}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loginLoading || !password}
+                    className="relative w-full py-4 rounded-xl text-sm font-bold transition-all duration-300 disabled:opacity-25 disabled:cursor-not-allowed overflow-hidden group"
+                    suppressHydrationWarning
+                  >
+                    {/* Button background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] via-[#a50000] to-[#8A0000] group-hover:from-[#9a0000] group-hover:via-[#b51010] group-hover:to-[#9a0000] transition-all duration-300" />
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+                      backgroundSize: '200% 100%',
+                      animation: 'shimmer 2s linear infinite',
+                    }} />
+                    {/* Glow underlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] to-[#b91c1c] opacity-0 group-hover:opacity-60 blur-xl transition-opacity duration-300" />
+                    <span className="relative text-white flex items-center justify-center gap-2.5 tracking-wide">
+                      {loginLoading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Authenticating...
+                        </>
+                      ) : (
+                        <>
+                          Access Dashboard
+                          <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+                        </>
+                      )}
+                    </span>
+                  </button>
+                </form>
+
+                {/* Divider */}
+                <div className="flex items-center gap-4 my-6">
+                  <div className="flex-1 h-px bg-white/[0.04]" />
+                  <span className="text-[9px] text-gray-700 font-mono tracking-[0.2em] uppercase">Secure</span>
+                  <div className="flex-1 h-px bg-white/[0.04]" />
+                </div>
+
+                {/* Security indicators */}
+                <div className="flex items-center justify-center gap-5">
+                  {[
+                    { icon: <Shield size={11} />, label: '256-bit' },
+                    { icon: <Clock size={11} />, label: '24h Sessions' },
+                    { icon: <EyeOff size={11} />, label: 'Zero-Knowledge' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center gap-1.5 text-gray-600">
+                      {item.icon}
+                      <span className="text-[10px] font-medium tracking-wide">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Back to website */}
             <button
               onClick={() => goToPage('home')}
-              className="mt-6 w-full text-center text-sm text-gray-600 hover:text-gray-300 transition-colors flex items-center justify-center gap-2 group"
+              className="mt-8 w-full text-center text-sm text-gray-600 hover:text-gray-300 transition-colors flex items-center justify-center gap-2 group"
               suppressHydrationWarning
             >
-              <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-              Back to website
+              <ChevronLeft size={14} className="group-hover:-translate-x-1 transition-transform duration-200" />
+              <span>Return to University of Artemis</span>
             </button>
 
-            {/* Security notice */}
-            <p className="mt-6 text-center text-[10px] text-gray-700 font-mono tracking-wide">
-              PROTECTED BY ARTEMIS SECURITY · SESSIONS EXPIRE AFTER 24H
-            </p>
+            {/* Footer security notice */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <div className="w-1 h-1 rounded-full bg-[#8A0000]/40" />
+              <p className="text-[9px] text-gray-700 font-mono tracking-[0.2em] uppercase">
+                Protected by Artemis Security Protocol
+              </p>
+              <div className="w-1 h-1 rounded-full bg-[#8A0000]/40" />
+            </div>
           </div>
         </div>
+
+        {/* ═══ CSS Keyframes ═══ */}
+        <style jsx>{`
+          @keyframes auroraPulse {
+            0% { opacity: 0.05; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0.09; transform: translateX(-50%) scale(1.15); }
+          }
+          @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -20px); }
+            66% { transform: translate(-15px, 15px); }
+          }
+          @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(-25px, 20px); }
+            66% { transform: translate(20px, -10px); }
+          }
+          @keyframes floatOrb3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -30px); }
+          }
+          @keyframes particleDrift {
+            0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-20px) translateX(10px); opacity: 0.1; }
+          }
+          @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes ringPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0; transform: scale(1.3); }
+          }
+          @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+          }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+          @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(3px); }
+          }
+        `}</style>
       </div>
     );
   }
