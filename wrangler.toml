@@ -1,5 +1,5 @@
-name = "artemis-university"
-compatibility_date = "2024-12-01"
+name = "artemis-universez"
+compatibility_date = "2026-05-20"
 compatibility_flags = ["nodejs_compat"]
 send_metrics = false
 
@@ -16,4 +16,4 @@ database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
 
 # Secrets (set via: wrangler pages secret put ADMIN_PASSWORD)
 # Do NOT put ADMIN_PASSWORD here — use Cloudflare dashboard or CLI:
-#   wrangler pages secret put ADMIN_PASSWORD --project-name artemis-university
+#   wrangler pages secret put ADMIN_PASSWORD --project-name artemis-universez
