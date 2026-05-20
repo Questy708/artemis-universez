@@ -7,7 +7,7 @@ import { IdentityPage } from './onboarding/IdentityPage';
 import { VerifyPage } from './onboarding/VerifyPage';
 import { WorkspacePage } from './onboarding/WorkspacePage';
 import { AppMockup } from './onboarding/AppMockup';
-import { ActiveLearningForum } from './forum/ActiveLearningForum';
+import { LMSApp } from './lms/LMSApp';
 
 type Step = 'LANDING' | 'AUTH' | 'VERIFY' | 'WORKSPACE' | 'APP';
 
@@ -20,13 +20,17 @@ const STORAGE_KEY = 'artemis-project-state';
 interface AppState {
   currentStep: Step;
   travelerName: string;
+  travelerEmail: string;
   workspace: string;
+  role: string;
 }
 
 const defaultState: AppState = {
   currentStep: 'LANDING',
   travelerName: '',
+  travelerEmail: '',
   workspace: '',
+  role: 'student',
 };
 
 let storeListeners: (() => void)[] = [];
@@ -62,11 +66,7 @@ function parseSnapshot(snapshot: string): AppState {
 export default function ArtemisProjectApp({ onExit }: ArtemisProjectAppProps) {
   const snapshot = useSyncExternalStore(storeSubscribe, storeGetSnapshot, storeGetServerSnapshot);
   const appState = parseSnapshot(snapshot);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [isClient] = useState(() => typeof window !== 'undefined');
 
   const setCurrentStep = useCallback((step: Step) => {
     storeWrite({ ...parseSnapshot(storeGetSnapshot()), currentStep: step });
@@ -76,8 +76,16 @@ export default function ArtemisProjectApp({ onExit }: ArtemisProjectAppProps) {
     storeWrite({ ...parseSnapshot(storeGetSnapshot()), travelerName: name });
   }, []);
 
+  const setTravelerEmail = useCallback((email: string) => {
+    storeWrite({ ...parseSnapshot(storeGetSnapshot()), travelerEmail: email });
+  }, []);
+
   const setWorkspace = useCallback((ws: string) => {
     storeWrite({ ...parseSnapshot(storeGetSnapshot()), workspace: ws });
+  }, []);
+
+  const setRole = useCallback((role: string) => {
+    storeWrite({ ...parseSnapshot(storeGetSnapshot()), role });
   }, []);
 
   if (!isClient) {
@@ -88,10 +96,10 @@ export default function ArtemisProjectApp({ onExit }: ArtemisProjectAppProps) {
     );
   }
 
-  const { currentStep, travelerName, workspace } = appState;
+  const { currentStep, travelerName, travelerEmail, workspace, role } = appState;
 
   if (currentStep === 'APP') {
-    return <ActiveLearningForum travelerName={travelerName} workspace={workspace} onExit={onExit} />;
+    return <LMSApp travelerName={travelerName} workspace={workspace} onExit={onExit} />;
   }
 
   if (currentStep === 'LANDING') {
@@ -110,13 +118,25 @@ export default function ArtemisProjectApp({ onExit }: ArtemisProjectAppProps) {
       onBack={stepBackMap[currentStep] ? () => setCurrentStep(stepBackMap[currentStep]) : undefined}
     >
       {currentStep === 'AUTH' && (
-        <IdentityPage onNext={() => setCurrentStep('VERIFY')} travelerName={travelerName} setTravelerName={setTravelerName} />
+        <IdentityPage
+          onNext={() => setCurrentStep('VERIFY')}
+          travelerName={travelerName}
+          setTravelerName={setTravelerName}
+          travelerEmail={travelerEmail}
+          setTravelerEmail={setTravelerEmail}
+        />
       )}
       {currentStep === 'VERIFY' && (
         <VerifyPage onNext={() => setCurrentStep('WORKSPACE')} onBack={() => setCurrentStep('AUTH')} />
       )}
       {currentStep === 'WORKSPACE' && (
-        <WorkspacePage onNext={() => setCurrentStep('APP')} onLogout={() => setCurrentStep('AUTH')} travelerName={travelerName} />
+        <WorkspacePage
+          onNext={() => setCurrentStep('APP')}
+          onLogout={() => setCurrentStep('AUTH')}
+          travelerName={travelerName}
+          role={role}
+          setRole={setRole}
+        />
       )}
     </SplitLayout>
   );

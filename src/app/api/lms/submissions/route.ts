@@ -1,0 +1,75 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const assignmentId = searchParams.get('assignmentId');
+
+    const where: Record<string, unknown> = {};
+    if (userId) where.userId = userId;
+    if (assignmentId) where.assignmentId = assignmentId;
+
+    const submissions = await db.assignmentSubmission.findMany({
+      where,
+      include: {
+        assignment: {
+          include: { course: true },
+        },
+        user: {
+          select: { id: true, name: true, email: true, role: true },
+        },
+        tutorFeedback: {
+          include: {
+            tutor: { select: { id: true, name: true } },
+          },
+        },
+      },
+      orderBy: { submittedAt: 'desc' },
+    });
+
+    return NextResponse.json({ submissions });
+  } catch (error) {
+    console.error('LMS Submissions error:', error);
+    return NextResponse.json({ error: 'Failed to fetch submissions' }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { assignmentId, userId, content } = body as {
+      assignmentId: string;
+      userId: string;
+      content: string;
+    };
+
+    if (!assignmentId || !userId || !content) {
+      return NextResponse.json({ error: 'assignmentId, userId, and content are required' }, { status: 400 });
+    }
+
+    // Check if already submitted
+    const existing = await db.assignmentSubmission.findFirst({
+      where: { assignmentId, userId },
+    });
+
+    if (existing) {
+      // Update existing submission
+      const updated = await db.assignmentSubmission.update({
+        where: { id: existing.id },
+        data: { content, status: 'submitted', submittedAt: new Date() },
+      });
+      return NextResponse.json({ submission: updated });
+    }
+
+    const submission = await db.assignmentSubmission.create({
+      data: { assignmentId, userId, content },
+    });
+
+    return NextResponse.json({ submission });
+  } catch (error) {
+    console.error('LMS Submit error:', error);
+    return NextResponse.json({ error: 'Failed to submit' }, { status: 500 });
+  }
+}

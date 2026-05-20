@@ -6,12 +6,14 @@ interface IdentityPageProps {
   onNext: () => void;
   travelerName: string;
   setTravelerName: (name: string) => void;
+  travelerEmail: string;
+  setTravelerEmail: (email: string) => void;
 }
 
-export function IdentityPage({ onNext, travelerName, setTravelerName }: IdentityPageProps) {
+export function IdentityPage({ onNext, travelerName, setTravelerName, travelerEmail, setTravelerEmail }: IdentityPageProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (travelerName.trim()) {
+    if (travelerName.trim() && travelerEmail.trim()) {
       onNext();
     }
   };
@@ -43,18 +45,18 @@ export function IdentityPage({ onNext, travelerName, setTravelerName }: Identity
           <div className="w-full border-t border-gray-100" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-white px-3 text-gray-400">or continue with your name</span>
+          <span className="bg-white px-3 text-gray-400">or continue with your details</span>
         </div>
       </div>
 
-      {/* Name Form */}
+      {/* Name & Email Form */}
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <label
             htmlFor="traveler-name"
             className="block text-xs font-medium text-gray-600"
           >
-            Traveler name
+            Full name
           </label>
           <input
             id="traveler-name"
@@ -67,9 +69,26 @@ export function IdentityPage({ onNext, travelerName, setTravelerName }: Identity
           />
         </div>
 
+        <div className="space-y-2">
+          <label
+            htmlFor="traveler-email"
+            className="block text-xs font-medium text-gray-600"
+          >
+            Email address
+          </label>
+          <input
+            id="traveler-email"
+            type="email"
+            value={travelerEmail}
+            onChange={(e) => setTravelerEmail(e.target.value)}
+            placeholder="you@artemis.edu"
+            className="w-full h-11 px-3.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 transition-all focus:outline-none focus:border-[#8A0000] focus:ring-2 focus:ring-[#8A0000]/10"
+          />
+        </div>
+
         <button
           type="submit"
-          disabled={!travelerName.trim()}
+          disabled={!travelerName.trim() || !travelerEmail.trim()}
           className="w-full flex items-center justify-center gap-2 h-11 px-4 rounded-lg bg-[#8A0000] text-white text-sm font-medium transition-all hover:bg-[#9B0F0F] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#8A0000] disabled:active:scale-100"
         >
           Continue
