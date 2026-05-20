@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "artemis-universez",
+	"compatibility_date": "2026-05-20",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference service binding, the service name must match the worker name
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "artemis-universez"
+		}
+	],
+	"r2_buckets": [
+		// Use R2 incremental cache
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "artemis-universez-opennext-cache"
+		}
+	],
+	"images": {
+		// Enable image optimization
+		"binding": "IMAGES"
+	},
+	// D1 Database binding
+	"d1_databases": [
+		{
+			"binding": "D1_DATABASE",
+			"database_name": "artemis-lms-db",
+			"database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+		}
+	]
+}

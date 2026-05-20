@@ -1,0 +1,197 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/lms/courses/[id]",
+      "regex": "^/api/lms/courses/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/lms/courses/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/api",
+      "regex": "^/api(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api(?:/)?$"
+    },
+    {
+      "page": "/api/admin",
+      "regex": "^/api/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin(?:/)?$"
+    },
+    {
+      "page": "/api/admin/login",
+      "regex": "^/api/admin/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/login(?:/)?$"
+    },
+    {
+      "page": "/api/applications",
+      "regex": "^/api/applications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/applications(?:/)?$"
+    },
+    {
+      "page": "/api/artemis-tutor",
+      "regex": "^/api/artemis\\-tutor(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/artemis\\-tutor(?:/)?$"
+    },
+    {
+      "page": "/api/campaign",
+      "regex": "^/api/campaign(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/campaign(?:/)?$"
+    },
+    {
+      "page": "/api/chat",
+      "regex": "^/api/chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat(?:/)?$"
+    },
+    {
+      "page": "/api/contact",
+      "regex": "^/api/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
+      "page": "/api/donations",
+      "regex": "^/api/donations(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/donations(?:/)?$"
+    },
+    {
+      "page": "/api/lms/ai-review",
+      "regex": "^/api/lms/ai\\-review(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/ai\\-review(?:/)?$"
+    },
+    {
+      "page": "/api/lms/assignments",
+      "regex": "^/api/lms/assignments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/assignments(?:/)?$"
+    },
+    {
+      "page": "/api/lms/auth",
+      "regex": "^/api/lms/auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/auth(?:/)?$"
+    },
+    {
+      "page": "/api/lms/courses",
+      "regex": "^/api/lms/courses(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/courses(?:/)?$"
+    },
+    {
+      "page": "/api/lms/dashboard",
+      "regex": "^/api/lms/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/dashboard(?:/)?$"
+    },
+    {
+      "page": "/api/lms/enrollments",
+      "regex": "^/api/lms/enrollments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/enrollments(?:/)?$"
+    },
+    {
+      "page": "/api/lms/submissions",
+      "regex": "^/api/lms/submissions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/submissions(?:/)?$"
+    },
+    {
+      "page": "/api/lms/tutor-review",
+      "regex": "^/api/lms/tutor\\-review(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/lms/tutor\\-review(?:/)?$"
+    },
+    {
+      "page": "/api/paypal/config",
+      "regex": "^/api/paypal/config(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/paypal/config(?:/)?$"
+    },
+    {
+      "page": "/api/stripe/checkout",
+      "regex": "^/api/stripe/checkout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/stripe/checkout(?:/)?$"
+    },
+    {
+      "page": "/api/stripe/webhook",
+      "regex": "^/api/stripe/webhook(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/stripe/webhook(?:/)?$"
+    },
+    {
+      "page": "/api/subscribe",
+      "regex": "^/api/subscribe(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/subscribe(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
