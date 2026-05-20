@@ -53,3 +53,6 @@ prompt
 server.log
 # Skills directory
 /skills/sana-ai-ref/
+
+# Cloudflare OpenNext build output
+.open-next/
