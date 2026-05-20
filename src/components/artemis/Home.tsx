@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { heroContent, blogArticles } from '@/lib/artemis-data';
 import ArtemisMap from '@/components/artemis/ArtemisMap';
 import SubscribeForm from '@/components/artemis/SubscribeForm';
+import SubPageFooter from '@/components/artemis/SubPageFooter';
 
 interface HomeProps {
   goToPage: (page: string, program?: string) => void;
@@ -560,6 +561,9 @@ export default function Home({ goToPage }: HomeProps) {
         </div>
         <SubscribeForm source="homepage" variant="compact" className="" />
       </div>
+
+      {/* Footer — consistent with all other pages */}
+      <SubPageFooter goToPage={goToPage} />
     </div>
   );
 }
