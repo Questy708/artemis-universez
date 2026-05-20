@@ -14,5 +14,6 @@ database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
 # binding = "RATE_LIMIT_KV"
 # id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
 
-[vars]
-ADMIN_PASSWORD = "Artemis2026!"
+# Secrets (set via: wrangler pages secret put ADMIN_PASSWORD)
+# Do NOT put ADMIN_PASSWORD here — use Cloudflare dashboard or CLI:
+#   wrangler pages secret put ADMIN_PASSWORD --project-name artemis-university
