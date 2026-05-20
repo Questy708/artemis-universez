@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyLMSAuth, hasRole } from '@/lib/lms-auth';
 import ZAI from 'z-ai-web-dev-sdk';
 
 const AI_REVIEW_PROMPT = `You are an AI academic reviewer for the Artemis Learning Management System. You provide constructive, detailed feedback on student submissions. Your review should:
@@ -14,6 +15,16 @@ Keep your review concise (3-4 paragraphs) but thorough. Use a warm, intellectual
 
 export async function POST(request: NextRequest) {
   try {
+    const authUser = await verifyLMSAuth(request);
+    if (!authUser) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    // Only tutors and admins can trigger AI reviews
+    if (!hasRole(authUser, ['tutor', 'admin'])) {
+      return NextResponse.json({ error: 'Only tutors and admins can trigger AI reviews' }, { status: 403 });
+    }
+
     const body = await request.json();
     const { submissionId } = body as { submissionId: string };
 
@@ -41,6 +52,12 @@ export async function POST(request: NextRequest) {
       contentText = parsed.text || parsed.content || submission.content;
     } catch {
       // content is plain text
+    }
+
+    // Limit content sent to AI to prevent token abuse
+    const maxContentLength = 30000;
+    if (contentText.length > maxContentLength) {
+      contentText = contentText.slice(0, maxContentLength) + '\n\n[Content truncated for review]';
     }
 
     // Generate AI feedback

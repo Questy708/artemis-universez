@@ -1,24 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyLMSAuth } from '@/lib/lms-auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const role = searchParams.get('role');
-
-    if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+    const authUser = await verifyLMSAuth(request);
+    if (!authUser) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
-    const user = await db.lMSUser.findUnique({ where: { id: userId } });
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    const userId = authUser.id;
+    const userRole = authUser.role;
 
-    const userRole = role || user.role;
-
-    // Common stats
     const [
       totalUsers,
       totalCourses,
@@ -132,7 +125,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: { id: authUser.id, name: authUser.name, email: authUser.email, role: authUser.role },
       stats: { totalUsers, totalCourses, totalEnrollments },
       studentData: {
         enrollments: userEnrollments,

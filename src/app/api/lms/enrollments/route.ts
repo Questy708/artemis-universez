@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyLMSAuth, hasRole } from '@/lib/lms-auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const authUser = await verifyLMSAuth(request);
+    if (!authUser) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
 
-    if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId') || authUser.id;
+
+    // Students can only see their own enrollments
+    if (authUser.role === 'student' && userId !== authUser.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     const enrollments = await db.enrollment.findMany({
@@ -37,12 +44,25 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const authUser = await verifyLMSAuth(request);
+    if (!authUser) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
     const body = await request.json();
     const { userId, courseId, role } = body as { userId: string; courseId: string; role?: string };
 
     if (!userId || !courseId) {
       return NextResponse.json({ error: 'userId and courseId are required' }, { status: 400 });
     }
+
+    // Students can only enroll themselves
+    if (authUser.role === 'student' && userId !== authUser.id) {
+      return NextResponse.json({ error: 'You can only enroll yourself' }, { status: 403 });
+    }
+
+    // Only admins can assign tutor role on enrollment
+    const safeRole = role === 'tutor' && hasRole(authUser, ['admin']) ? 'tutor' : 'student';
 
     // Check if already enrolled
     const existing = await db.enrollment.findFirst({
@@ -57,7 +77,7 @@ export async function POST(request: NextRequest) {
       data: {
         userId,
         courseId,
-        role: role || 'student',
+        role: safeRole,
       },
     });
 

@@ -1,9 +1,63 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
+const MAX_LOGIN_ATTEMPTS = 10;
+const LOCKOUT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+
+// Simple in-memory rate limiter for login attempts
+// In production, use Redis or a proper rate-limiting service
+const loginAttempts = new Map<string, { count: number; firstAttempt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = loginAttempts.get(ip);
+
+  if (!entry) return false;
+
+  // Reset if outside the lockout window
+  if (now - entry.firstAttempt > LOCKOUT_WINDOW_MS) {
+    loginAttempts.delete(ip);
+    return false;
+  }
+
+  return entry.count >= MAX_LOGIN_ATTEMPTS;
+}
+
+function recordAttempt(ip: string) {
+  const now = Date.now();
+  const entry = loginAttempts.get(ip);
+
+  if (!entry || now - entry.firstAttempt > LOCKOUT_WINDOW_MS) {
+    loginAttempts.set(ip, { count: 1, firstAttempt: now });
+  } else {
+    entry.count++;
+  }
+}
+
+// Clean up old entries periodically (every 5 minutes)
+if (typeof globalThis !== 'undefined' && !(globalThis as any).__loginCleanupInterval) {
+  (globalThis as any).__loginCleanupInterval = setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of loginAttempts.entries()) {
+      if (now - entry.firstAttempt > LOCKOUT_WINDOW_MS) {
+        loginAttempts.delete(ip);
+      }
+    }
+  }, 5 * 60 * 1000);
+}
+
 // POST /api/admin/login — authenticate with admin password
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     const { password } = await request.json();
     const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -16,6 +70,7 @@ export async function POST(request: Request) {
     }
 
     if (password !== adminPassword) {
+      recordAttempt(ip);
       return NextResponse.json(
         { error: 'Invalid password' },
         { status: 401 }
@@ -24,9 +79,11 @@ export async function POST(request: Request) {
 
     // Generate a session token with cryptographic hash
     const timestamp = Date.now().toString();
-    const random = Math.random().toString(36).slice(2, 10);
+    const random = crypto.randomBytes(8).toString('hex'); // Use crypto.randomBytes instead of Math.random
     const hash = crypto.createHash('sha256').update(adminPassword + timestamp).digest('base64url').slice(0, 16);
     const token = `adm_${timestamp}_${random}_${hash}`;
+
+    const isProduction = process.env.NODE_ENV === 'production';
 
     const response = NextResponse.json({
       success: true,
@@ -37,8 +94,8 @@ export async function POST(request: Request) {
     // Set HttpOnly cookie — not accessible via JavaScript, only by the server
     response.cookies.set('artemis_admin_token', token, {
       httpOnly: true,
-      secure: false, // Allow cookie over HTTP in development
-      sameSite: 'lax', // 'lax' allows the cookie on same-site navigation
+      secure: isProduction, // Only require HTTPS in production
+      sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24, // 24 hours
     });
@@ -54,10 +111,11 @@ export async function POST(request: Request) {
 
 // DELETE /api/admin/login — logout
 export async function DELETE() {
+  const isProduction = process.env.NODE_ENV === 'production';
   const response = NextResponse.json({ success: true, message: 'Logged out' });
   response.cookies.set('artemis_admin_token', '', {
     httpOnly: true,
-    secure: false,
+    secure: isProduction,
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
