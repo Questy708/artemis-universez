@@ -1061,7 +1061,7 @@ export default function AdminDashboard({ goToPage }: Props) {
         </div>
 
         {/* ═══ CSS Keyframes ═══ */}
-        <style jsx>{`
+        <style dangerouslySetInnerHTML={{ __html: `
           @keyframes auroraPulse {
             0% { opacity: 0.05; transform: translateX(-50%) scale(1); }
             100% { opacity: 0.09; transform: translateX(-50%) scale(1.15); }
@@ -1108,7 +1108,7 @@ export default function AdminDashboard({ goToPage }: Props) {
             60% { transform: translateX(-4px); }
             80% { transform: translateX(3px); }
           }
-        `}</style>
+        ` }} />
       </div>
     );
   }

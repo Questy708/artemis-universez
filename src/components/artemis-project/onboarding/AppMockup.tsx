@@ -154,7 +154,7 @@ export function AppMockup() {
       </div>
 
       {/* Inline Keyframes */}
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes slide-in {
           from {
             opacity: 0;
@@ -184,7 +184,7 @@ export function AppMockup() {
         .animate-chat-slide-in {
           animation: chat-slide-in 0.4s ease-out forwards;
         }
-      `}</style>
+      ` }} />
     </div>
   );
 }
