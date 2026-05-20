@@ -540,6 +540,9 @@ export default function Home({ goToPage }: HomeProps) {
         </div>
       </section>
 
+      {/* ── Transition into footer ── */}
+      <div className="relative h-24 bg-gradient-to-b from-white via-gray-100 to-[#0a0a0a]" />
+
       {/* Footer — consistent with all other pages */}
       <SubPageFooter goToPage={goToPage} />
     </div>
