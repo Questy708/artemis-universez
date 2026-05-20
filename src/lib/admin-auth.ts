@@ -1,5 +1,14 @@
 import { cookies } from 'next/headers';
 
+// Edge-compatible hash function using Web Crypto API
+async function sha256Hash(input: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 22);
+}
+
 // Verify admin session from HttpOnly cookie AND/OR Authorization header
 // The dual approach ensures auth works even if cookies are stripped by a reverse proxy
 export async function verifyAdminAuth(request?: Request): Promise<boolean> {
@@ -28,7 +37,6 @@ export async function verifyAdminAuth(request?: Request): Promise<boolean> {
     if (!token) return false;
 
     // Token format: adm_{timestamp}_{random}_{hash}
-    // The hash may contain underscores, so we only split on the first 3 underscores
     if (!token.startsWith('adm_')) return false;
 
     const afterPrefix = token.slice(4); // Remove 'adm_'
@@ -45,8 +53,7 @@ export async function verifyAdminAuth(request?: Request): Promise<boolean> {
     if (!timestamp || !hash) return false;
 
     // Verify the hash matches what we'd generate from the current password + timestamp
-    const crypto = await import('crypto');
-    const expectedHash = crypto.createHash('sha256').update(adminPassword + timestamp).digest('base64url').slice(0, 16);
+    const expectedHash = await sha256Hash(adminPassword + timestamp);
     return hash === expectedHash;
   } catch {
     return false;

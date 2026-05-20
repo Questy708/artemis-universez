@@ -5,13 +5,22 @@
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "build:cf": "BUILD_TARGET=cloudflare npx @opennextjs/cloudflare",
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "lint": "eslint .",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
-    "db:seed": "bunx tsx prisma/seed.ts"
+    "db:seed": "bunx tsx prisma/seed.ts",
+    "pages:build": "bun run build:cf",
+    "pages:deploy": "bun run build:cf && wrangler pages deploy",
+    "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat --d1=D1_DATABASE",
+    "db:d1:create": "wrangler d1 create artemis-lms-db",
+    "db:d1:migrate": "wrangler d1 migrations apply artemis-lms-db",
+    "db:d1:migrate:local": "wrangler d1 migrations apply artemis-lms-db --local",
+    "db:d1:seed": "wrangler d1 execute artemis-lms-db --file=prisma/seed.sql",
+    "db:d1:seed:local": "wrangler d1 execute artemis-lms-db --local --file=prisma/seed.sql"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -20,6 +29,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@mdxeditor/editor": "^3.39.1",
     "@opennextjs/cloudflare": "^1.19.10",
+    "@prisma/adapter-d1": "^7.8.0",
     "@prisma/client": "^6.11.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",

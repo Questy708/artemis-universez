@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 
 const MAX_LOGIN_ATTEMPTS = 10;
 const LOCKOUT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
@@ -46,6 +45,21 @@ if (typeof globalThis !== 'undefined' && !(globalThis as any).__loginCleanupInte
   }, 5 * 60 * 1000);
 }
 
+// Edge-compatible hash function using Web Crypto API
+async function sha256Hash(input: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 22); // ~16 bytes base64url equivalent
+}
+
+function randomHex(bytes: number): string {
+  const array = new Uint8Array(bytes);
+  crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // POST /api/admin/login — authenticate with admin password
 export async function POST(request: Request) {
   try {
@@ -79,8 +93,8 @@ export async function POST(request: Request) {
 
     // Generate a session token with cryptographic hash
     const timestamp = Date.now().toString();
-    const random = crypto.randomBytes(8).toString('hex'); // Use crypto.randomBytes instead of Math.random
-    const hash = crypto.createHash('sha256').update(adminPassword + timestamp).digest('base64url').slice(0, 16);
+    const random = randomHex(8); // Use crypto.getRandomValues instead of Math.random
+    const hash = await sha256Hash(adminPassword + timestamp);
     const token = `adm_${timestamp}_${random}_${hash}`;
 
     const isProduction = process.env.NODE_ENV === 'production';
