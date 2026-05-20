@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { heroContent, blogArticles } from '@/lib/artemis-data';
 import ArtemisMap from '@/components/artemis/ArtemisMap';
-import SubscribeForm from '@/components/artemis/SubscribeForm';
 import SubPageFooter from '@/components/artemis/SubPageFooter';
 
 interface HomeProps {
@@ -540,27 +539,6 @@ export default function Home({ goToPage }: HomeProps) {
           </div>
         </div>
       </section>
-
-      {/* ═══════════════════════════════════════════
-          CRIMSON SUBSCRIPTION BAR
-          ═══════════════════════════════════════════ */}
-      <div className="bg-[#8A0000] text-white p-10 flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-6 md:mb-0 max-w-lg text-center md:text-left">
-          <h4 className="text-[20px] font-bold mb-2">Want more about the Artemis Project?</h4>
-          <p className="text-[16px] font-medium leading-relaxed">
-            Explore{' '}
-            <button onClick={() => goToPage('blog')} className="underline hover:opacity-80" suppressHydrationWarning>
-              the Artemis Journal
-            </button>
-            , or subscribe to receive{' '}
-            <button onClick={() => goToPage('innovation')} className="underline hover:opacity-80" suppressHydrationWarning>
-              weekly dispatches
-            </button>{' '}
-            in your inbox.
-          </p>
-        </div>
-        <SubscribeForm source="homepage" variant="compact" className="" />
-      </div>
 
       {/* Footer — consistent with all other pages */}
       <SubPageFooter goToPage={goToPage} />
