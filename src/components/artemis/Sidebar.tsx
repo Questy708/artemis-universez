@@ -96,6 +96,28 @@ export default function Sidebar({ isOpen, onClose, goHome, goToPage, hideDesktop
           </ul>
         </div>
 
+        {/* ── Artemis Project Micro-App ── */}
+        <div className="bg-[#0a0a0a] p-5 mb-6 group">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="grid grid-cols-2 gap-[3px]">
+              <div className="w-[6px] h-[6px] rounded-full bg-[#8A0000]" />
+              <div className="w-[6px] h-[6px] rounded-full bg-[#8A0000]/70" />
+              <div className="w-[6px] h-[6px] rounded-full bg-[#8A0000]/70" />
+              <div className="w-[6px] h-[6px] rounded-full bg-[#8A0000]" />
+            </div>
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/90">Artemis Project</span>
+          </div>
+          <p className="text-[13px] text-white/50 leading-relaxed mb-4">Live seminars, real-time polls, breakout discussions, and AI-powered tutoring.</p>
+          <button
+            onClick={() => { goToPage('artemis-project'); onClose?.(); }}
+            className="inline-flex items-center gap-2 h-9 px-5 rounded bg-[#8A0000] text-white text-[11px] font-bold uppercase tracking-wider hover:bg-[#9B0F0F] active:scale-[0.98] transition-all shadow-lg shadow-[#8A0000]/20"
+            suppressHydrationWarning
+          >
+            Enter the Forum
+            <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+          </button>
+        </div>
+
         <div className="bg-[#FFF5F5] border border-[#FFDADA] p-5 mb-10">
           <h4 className="text-[14px] font-bold border-b border-[#FFDADA] pb-2 mb-3">Artemis Manifesto</h4>
           <button onClick={() => { goToPage('the-university'); onClose?.(); }} className="text-[13px] leading-snug text-left hover:underline" suppressHydrationWarning>Read the 'The Artemis Project' - our mission to re-engineer human learning.</button>
