@@ -766,73 +766,175 @@ export default function AdminDashboard({ goToPage }: Props) {
   // ─── Auth check loading ───
   if (!authChecked) {
     return (
-      <div className="min-h-screen bg-[#0A2540] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#050a14] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="w-12 h-12 border-2 border-[#8A0000]/30 border-t-[#8A0000] rounded-full animate-spin" />
+            <div className="absolute inset-0 w-12 h-12 border-2 border-transparent border-b-[#80E9FF]/40 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
+          </div>
+          <p className="text-gray-500 text-xs font-mono tracking-widest uppercase">Verifying credentials</p>
         </div>
       </div>
     );
   }
 
-  // ─── Login Screen — Stripe-inspired ───
+  // ─── Login Screen — Artemis Futuristic Design ───
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0A2540] flex items-center justify-center px-6">
-        <div className="w-full max-w-[400px]">
-          <div className="text-center mb-12">
-            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Shield size={22} className="text-[#0A2540]" />
+      <div className="min-h-screen bg-[#050a14] flex relative overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0">
+          {/* Gradient orbs */}
+          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#8A0000]/8 rounded-full blur-[120px]" />
+          <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#80E9FF]/5 rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#8A0000]/3 rounded-full blur-[200px]" />
+          {/* Grid pattern */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }} />
+        </div>
+
+        {/* Left side — branding */}
+        <div className="hidden lg:flex flex-1 flex-col justify-between p-12 relative z-10">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-xl bg-[#8A0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/20">
+                <Shield size={18} className="text-white" />
+              </div>
+              <div>
+                <span className="text-white font-bold text-lg tracking-tight">Artemis</span>
+                <span className="text-white/30 text-lg font-light ml-1.5">Command</span>
+              </div>
             </div>
-            <h1 className="text-[22px] font-semibold text-white mb-1">Artemis Dashboard</h1>
-            <p className="text-sm text-white/50">Sign in to your admin</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-white/60 mb-1.5 uppercase tracking-wider">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => { setPassword(e.target.value); setLoginError(''); }}
-                  placeholder="Enter your admin password"
-                  className="w-full bg-white/10 border border-white/15 rounded-lg text-white px-4 py-3 text-sm placeholder-white/25 focus:outline-none focus:border-[#80E9FF] focus:ring-1 focus:ring-[#80E9FF]/30 transition-all"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
-                  suppressHydrationWarning
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
+          <div className="max-w-md">
+            <h2 className="text-4xl font-bold text-white mb-4 leading-tight">
+              The future of<br />
+              <span className="bg-gradient-to-r from-[#8A0000] to-[#ff4444] bg-clip-text text-transparent">learning administration</span>
+            </h2>
+            <p className="text-gray-400 text-base leading-relaxed mb-8">
+              Manage the Artemis Collegium — applications, donations, communications, and the LMS. One dashboard for an entire global university.
+            </p>
+
+            {/* Feature pills */}
+            <div className="flex flex-wrap gap-2">
+              {['Admissions', 'Fundraising', 'LMS Analytics', 'Communications', 'AI Insights'].map((feat) => (
+                <span key={feat} className="px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-xs text-gray-400 font-medium">
+                  {feat}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 text-gray-600 text-xs">
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>All systems operational</span>
+            </div>
+            <span>·</span>
+            <span>University of Artemis</span>
+          </div>
+        </div>
+
+        {/* Right side — login form */}
+        <div className="flex-1 flex items-center justify-center px-6 relative z-10">
+          <div className="w-full max-w-[400px]">
+            {/* Mobile logo */}
+            <div className="lg:hidden flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 rounded-xl bg-[#8A0000] flex items-center justify-center shadow-lg shadow-[#8A0000]/20">
+                <Shield size={18} className="text-white" />
+              </div>
+              <div>
+                <span className="text-white font-bold text-lg">Artemis</span>
+                <span className="text-white/30 text-lg font-light ml-1.5">Command</span>
               </div>
             </div>
 
-            {loginError && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-lg text-red-300 px-4 py-3 text-sm">
-                {loginError}
+            {/* Form container */}
+            <div className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-8 shadow-2xl shadow-black/20">
+              <div className="mb-8">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8A0000] to-[#5a0000] flex items-center justify-center mb-5 shadow-lg shadow-[#8A0000]/20">
+                  <Shield size={24} className="text-white" />
+                </div>
+                <h1 className="text-xl font-bold text-white mb-1">Welcome back</h1>
+                <p className="text-sm text-gray-500">Enter your admin password to continue</p>
               </div>
-            )}
 
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">Admin Password</label>
+                  <div className="relative group">
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#8A0000]/20 to-[#80E9FF]/10 opacity-0 group-focus-within:opacity-100 transition-opacity blur-sm" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={e => { setPassword(e.target.value); setLoginError(''); }}
+                      placeholder="Enter password"
+                      className="relative w-full bg-white/[0.04] border border-white/[0.08] rounded-xl text-white px-4 py-3.5 text-sm placeholder-gray-600 focus:outline-none focus:border-[#8A0000]/50 focus:ring-1 focus:ring-[#8A0000]/20 transition-all"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-300 transition-colors"
+                      suppressHydrationWarning
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                {loginError && (
+                  <div className="flex items-center gap-2.5 bg-red-500/[0.08] border border-red-500/[0.15] rounded-xl px-4 py-3">
+                    <div className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
+                      <XCircle size={12} className="text-red-400" />
+                    </div>
+                    <span className="text-red-300/80 text-sm">{loginError}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loginLoading || !password}
+                  className="relative w-full py-3.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden group"
+                  suppressHydrationWarning
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] to-[#b91c1c] group-hover:from-[#9a0000] group-hover:to-[#c52525] transition-all" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#8A0000] to-[#b91c1c] opacity-0 group-hover:opacity-100 blur-xl transition-opacity" />
+                  <span className="relative text-white flex items-center justify-center gap-2">
+                    {loginLoading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Authenticating...
+                      </>
+                    ) : (
+                      <>
+                        Sign in
+                        <ArrowRight size={14} />
+                      </>
+                    )}
+                  </span>
+                </button>
+              </form>
+            </div>
+
+            {/* Back to website */}
             <button
-              type="submit"
-              disabled={loginLoading || !password}
-              className="w-full py-3 bg-[#80E9FF] text-[#0A2540] rounded-lg text-sm font-semibold hover:bg-[#65D9F2] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              onClick={() => goToPage('home')}
+              className="mt-6 w-full text-center text-sm text-gray-600 hover:text-gray-300 transition-colors flex items-center justify-center gap-2 group"
               suppressHydrationWarning
             >
-              {loginLoading ? 'Signing in...' : 'Continue'}
+              <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+              Back to website
             </button>
-          </form>
 
-          <button
-            onClick={() => goToPage('home')}
-            className="mt-8 w-full text-center text-sm text-white/30 hover:text-white/60 transition-colors flex items-center justify-center gap-2"
-            suppressHydrationWarning
-          >
-            <ChevronLeft size={14} /> Back to website
-          </button>
+            {/* Security notice */}
+            <p className="mt-6 text-center text-[10px] text-gray-700 font-mono tracking-wide">
+              PROTECTED BY ARTEMIS SECURITY · SESSIONS EXPIRE AFTER 24H
+            </p>
+          </div>
         </div>
       </div>
     );
